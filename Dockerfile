@@ -17,7 +17,7 @@ RUN apk add --no-cache --virtual .certbot-deps \
     binutils \
     python3
 
-COPY --from=0 /usr/local/lib/python3.7/site-packages /usr/lib/python3.7/site-packages
+COPY --from=0 /usr/local/lib/python3.8/site-packages /usr/lib/python3.7/site-packages
 COPY --from=0 /opt/certbot /opt/certbot
 COPY --from=0 /usr/local/bin/certbot /usr/bin/certbot
 
