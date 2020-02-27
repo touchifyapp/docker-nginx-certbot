@@ -1,4 +1,6 @@
-FROM certbot/certbot
+FROM python:3.8-alpine3.10 AS python
+
+FROM certbot/certbot AS certbot
 
 FROM nginx:alpine
 
@@ -15,16 +17,22 @@ RUN apk add --no-cache --virtual .certbot-deps \
     openssl \
     ca-certificates \
     binutils \
-    python3
+    expat
 
-COPY --from=0 /usr/local/lib/python3.8/site-packages /usr/lib/python3.7/site-packages
-COPY --from=0 /opt/certbot /opt/certbot
-COPY --from=0 /usr/local/bin/certbot /usr/bin/certbot
+COPY --from=python /usr/local/bin/idle /usr/local/bin/idle
+COPY --from=python /usr/local/bin/pydoc /usr/local/bin/pydoc
+COPY --from=python /usr/local/bin/python /usr/local/bin/python
+COPY --from=python /usr/local/bin/python-config /usr/local/bin/python-config
+
+COPY --from=python /usr/local/lib/libpython3.so /usr/local/lib/libpython3.so
+COPY --from=python /usr/local/lib/libpython3.8.so.1.0 /usr/local/lib/libpython3.8.so.1.0
+
+COPY --from=certbot /usr/local/lib/python3.8 /usr/local/lib/python3.8
+COPY --from=certbot /opt/certbot /opt/certbot
+COPY --from=certbot /usr/local/bin/certbot /usr/local/bin/certbot
 
 COPY run.sh /run.sh
 
-RUN ln -s /usr/bin/python3 /usr/bin/python && \
-    sed -i -e "s/local\/bin\/python/bin\/python/g" /usr/bin/certbot && \
-    chmod 500 /run.sh
+RUN chmod 500 /run.sh
 
 CMD [ "/run.sh" ]

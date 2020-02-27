@@ -4,14 +4,15 @@ domains="$DOMAINS"
 email="$EMAIL" # Adding a valid address is strongly recommended
 staging=$STAGING # Set to 1 if you're testing your setup to avoid hitting request limits
 
-domain=$(echo $domains | cut --delimiter " " --fields 1)
+domain=$(echo $domains | cut -d " " -f 1)
+domain_path="$conf_path/live/$domain"
 
 rsa_key_size=4096
 conf_path="/etc/letsencrypt"
 data_path="/usr/share/nginx/certbot"
 
 function main () {
-    if [ -d "$conf_path/live" ]; then
+    if [ -d "$domain_path" ]; then
         start_nginx_and_auto_renew
     else
         first_run
@@ -63,9 +64,8 @@ function import_recommended_tls_params () {
 
 function create_dummy_certificates () {
     echo "### Creating dummy certificate for $domains ..."
-    path="$conf_path/live/$domain"
-    mkdir -p "$conf_path/live/$domain"
-    openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout "$path/privkey.pem" -out "$path/fullchain.pem" -subj "/CN=localhost"
+    mkdir -p "$domain_path"
+    openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout "$domain_path/privkey.pem" -out "$domain_path/fullchain.pem" -subj "/CN=localhost"
     echo
 }
 
