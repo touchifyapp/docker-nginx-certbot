@@ -5,11 +5,11 @@ email="$EMAIL" # Adding a valid address is strongly recommended
 staging=$STAGING # Set to 1 if you're testing your setup to avoid hitting request limits
 
 domain=$(echo $domains | cut -d " " -f 1)
-domain_path="$conf_path/live/$domain"
 
 rsa_key_size=4096
 conf_path="/etc/letsencrypt"
 data_path="/usr/share/nginx/certbot"
+domain_path="$conf_path/live/$domain"
 
 function main () {
     if [ -d "$domain_path" ]; then
