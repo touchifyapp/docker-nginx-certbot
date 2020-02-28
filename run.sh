@@ -57,8 +57,8 @@ function reload_nginx () {
 function import_recommended_tls_params () {
     echo "### Downloading recommended TLS parameters ..."
     mkdir -p "$conf_path"
-    wget -P "$conf_path" https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/tls_configs/options-ssl-nginx.conf
-    wget -P "$conf_path" https://raw.githubusercontent.com/certbot/certbot/master/certbot/ssl-dhparams.pem
+    wget -P "$conf_path" https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf
+    wget -P "$conf_path" https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem
     echo
 }
 
